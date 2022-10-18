@@ -1,0 +1,3 @@
+en la carpeta public va todo el codigo html, css y javascript 
+que se vera en el navegador, asi como assets que se quieran 
+mostrar en el navegador

@@ -1,0 +1,181 @@
+﻿"mern-stack-task"
+>src(codigo fuente)
+>>index.js(punto de entrada de la aplicacion)
+>>routes(rutas o url)
+>>>task.routes.js(definir operaciones en base a las url)
+>>model(definir modelo base datos)
+>>>task.js(diseñar el esquema de base de datos)
+>>database.js(define como se va a acceder al servidor)
+>>public(html y cosas legibles al navegador)
+>>app(codigo de react)
+
+index.js
+
+terminal(inicializar proyecto de node)>npm init --yes
+
+crea package .json con configuraciones basicas
+
+terminal(instalar express)>npm install express
+terminal(instalar nodemon)>npm install nodemon -D
+
+index.js>>
+const express = require('express');
+const app = express();
+app.listen(3000,()=>{});
+
+//(setting)seccion para configuracion
+
+//(middleware)funciones a ejecurtar antes de llegar a las rutas
+
+//(routes)rutas-url
+
+//(static files)decir donde van los archivos estaticos
+
+//(starting server)iniciar servidor
+
+terminal(ejecutar)>node index.js
+
+package.json > script > "start":"node src/index.js","dev":"nodemon src/index.js"
+
+terminal>npm start
+terminal(aplicar cambios sin reiniciar servidor)>npm run dev
+
+//////////////////////////////
+
+SETTING---
+
+app.get('port',process.env.PORT||3000);
+
+app.listen(app.set('port'),()=>{
+coonsole.log("servidor en puerto"+app.get("port"))});
+
+END SETTING---
+
+terminal(morgan-ver por consola las aplicac)>npm install morgan
+
+MIDDLEWARE---
+
+const morgan = require ('morgan');
+app.use(morgan('dev'));
+app.use(express.json());
+
+END MIDDLEWARE---
+
+task.routes.js(definir las rutas de la aplicacion)>
+
+const express = require('express');
+const router = express.Router();
+
+router.get('/',(req,res)=>{res.send('Hello world');});
+router.get('/',(req,res)=>{res.json({status:'usable'});});
+
+
+module.exports=router;
+
+ROUTER---
+app.use(require('./routes/task.routes'));
+app.use('./api/tasks',require('./routes/task.routes'));
+END ROUTER---
+
+public>>index.html
+<div id="app"></div>
+
+terminal(conectarse a la base de datos y definir modelo de datos)>npm install mongoose
+
+terminal(inicializar mongod)>mongod
+
+database.js>>
+
+const mongoose = require('mongoose');
+const CONEC = 'mongodb://localhost/nombrebasesinoexistelacrea';
+
+mongoose.connect(CONEC)
+.then(db=>console.log('database is online'))
+.catch(err=>console.log(err));
+
+module.exports = mongoose;
+
+end database.js<<<
+
+index.js>>>
+
+const {mongoose}=require(./database);
+
+<<<end index.js
+
+task.js>>>>
+
+const mongoose = require('mongoose');
+const {Schema}=mongoose;
+
+const TaskSchema = new Schema({
+title:{type:String,required:true},
+description:{type:String,required:true}
+});
+
+module.exports = mongoose.model('Task',TaskSchema);
+
+end task<<<
+
+task.routes.js>>>>
+
+const Task = require(../models/task);
+
+CALLBACK//
+router.get('/',(req,res)=>{
+Task.find((err,tasks){
+console.log(tasks);});
+res.json({status:'API Works'});
+});
+
+PROMISE//
+Task.find()
+.then(data=>console.log(data))
+.catch(err=>console.log(err));
+
+ASYNC-AWAIT//
+router.get('/',async (req,res)=>{
+const taskss = await.Task.find();//esta tarea va a demorar
+//console.log(taskss);
+res.json(taskss);
+});
+
+
+50:00
+
+36:00
+
+////////////////////
+
+SEGUNDA PARTE
+
+terminal()>npm i webpack -D
+npm i webpack-cli -D
+
+package.json = "webpack": "webpack --mode development"
+
+console >> npm run webpack
+
+console >> npm install react react-dom -D
+
+console (traducir con JSX) >> npm install babel-core babel-loader babel-preset-react babel-preset-env -D
+
+crear .babelrc
+
+para los que estan empezando ahora el tutorial... Deben instalar Babel 7 y cambio la forma de los presets, deben instalar: Para el core: npm install --save-dev @babel/core Para dos presets: npm i @babel/preset-react -D npm i @babel/preset-env -D y los presets en .babelrc deben quedar asi: "@babel/preset-env","@babel/preset-react" El loader es el único que queda igual.﻿
+
+27:00
+
+35:00
+
+50:00
+
+1:03
+grahfql
+jsonwebtoken > mejorar seguridad
+
+usar TLS
+validator js para sanitizar url
+express rate limit limita el exceso de peticiones desde una ip?
+helmet > cabeceras http
+passport js
